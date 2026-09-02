@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>南投縣政府稅務局 - 教育訓練資訊網</title>
+    <title>南投縣政府稅務局 - 教育訓練管理系統</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -12,8 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Confetti JS -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- QRCode.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -50,20 +48,6 @@
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 4px;
-        }
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #print-qrcode-area, #print-qrcode-area * {
-                visibility: visible;
-            }
-            #print-qrcode-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -125,29 +109,24 @@
                             南投縣政府稅務局
                         </div>
                         <div class="text-base sm:text-lg md:text-xl font-bold tracking-wide text-amber-300 leading-snug">
-                            教育訓練資訊網
+                            教育訓練管理系統
                         </div>
                     </div>
                 </div>
 
-                <!-- System Mode Switcher & Quick Checkin -->
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="openSelfCheckinModal()" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-xs sm:text-sm rounded-xl transition shadow flex items-center space-x-1.5">
-                        <i class="fa-solid fa-qrcode text-base"></i>
-                        <span class="hidden xs:inline">課程簽到入口</span>
-                    </button>
-
+                <!-- System Mode Switcher -->
+                <div class="flex items-center space-x-3">
                     <!-- Mode Control Bar -->
                     <div class="bg-nttax-dark p-1 rounded-xl flex items-center space-x-1 border border-emerald-700/50 shadow-inner">
                         <button id="btn-mode-user" onclick="switchPortal('user')" class="px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 bg-emerald-600 text-white shadow">
                             <i class="fa-solid fa-user-graduate"></i>
-                            <span class="hidden sm:inline">學員報名區</span>
+                            <span>學員報名區</span>
                         </button>
                         
                         <button id="btn-mode-admin" onclick="switchPortal('admin')" class="px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 text-slate-300 hover:text-white relative">
                             <i id="admin-lock-icon" class="fa-solid fa-lock text-amber-400 text-xs mr-0.5"></i>
                             <i class="fa-solid fa-user-gear"></i>
-                            <span class="hidden sm:inline">管理者後台</span>
+                            <span>管理者後台</span>
                         </button>
 
                         <!-- Admin Logout Button -->
@@ -174,15 +153,12 @@
                     </h2>
                     <p class="text-sm text-slate-500">歡迎同仁踴躍報名年度教育訓練課程，提昇專能與為民服務品質。</p>
                 </div>
-                <div class="flex items-center space-x-2 bg-slate-100 p-1.5 rounded-xl self-start md:self-auto flex-wrap gap-y-2">
+                <div class="flex items-center space-x-2 bg-slate-100 p-1.5 rounded-xl self-start md:self-auto">
                     <button onclick="switchUserTab('courses')" id="tab-btn-courses" class="px-4 py-2 text-sm font-semibold rounded-lg bg-white text-nttax-800 shadow-sm transition">
                         <i class="fa-solid fa-list-check mr-1.5"></i>開放報名課程
                     </button>
                     <button onclick="switchUserTab('my-enroll')" id="tab-btn-my-enroll" class="px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">
                         <i class="fa-solid fa-address-card mr-1.5"></i>查詢個人報名紀錄
-                    </button>
-                    <button onclick="openSelfCheckinModal()" class="px-4 py-2 text-sm font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-900 transition shadow-sm">
-                        <i class="fa-solid fa-qrcode mr-1.5"></i>掃碼課堂簽到
                     </button>
                 </div>
             </div>
@@ -247,7 +223,7 @@
                             <span>管理者控制台權限已啟用</span>
                             <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-300">身份已驗證</span>
                         </h3>
-                        <p class="text-xs text-slate-500">您可以發布新課程、產生簽到 QRCode、管理局內報名名冊、執行簽到與設定 Google 試算表同步。</p>
+                        <p class="text-xs text-slate-500">您可以發布新課程、管理局內報名名冊、執行簽到與設定 Google 試算表同步。</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 self-end sm:self-auto">
@@ -322,8 +298,8 @@
             <div id="admin-tab-courses" class="space-y-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                     <div>
-                        <h3 class="font-bold text-slate-800 text-lg">課程列表與簽到條碼產生器</h3>
-                        <p class="text-xs text-slate-500">管理者可點擊「簽到 QRCode」按鈕產生課堂條碼供學員現場掃描簽到。</p>
+                        <h3 class="font-bold text-slate-800 text-lg">課程列表與狀態控制</h3>
+                        <p class="text-xs text-slate-500">管理者在此預設課程名稱、上課日期與時間，供報名者挑選。</p>
                     </div>
                     <button onclick="openAddCourseModal()" class="bg-nttax-700 hover:bg-nttax-800 text-white font-medium px-4 py-2 rounded-xl text-sm shadow transition flex items-center gap-2">
                         <i class="fa-solid fa-plus"></i>
@@ -336,13 +312,12 @@
                         <table class="w-full text-left text-sm">
                             <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
                                 <tr>
-                                    <th class="py-3.5 px-4">課程名稱</th>
-                                    <th class="py-3.5 px-4">上課日期</th>
-                                    <th class="py-3.5 px-4">上課時間</th>
+                                    <th class="py-3.5 px-4">課程名稱 (預設)</th>
+                                    <th class="py-3.5 px-4">上課日期 (預設)</th>
+                                    <th class="py-3.5 px-4">上課時間 (預設)</th>
                                     <th class="py-3.5 px-4">地點</th>
                                     <th class="py-3.5 px-4 text-center">已報名 / 名額</th>
                                     <th class="py-3.5 px-4 text-center">開放狀態</th>
-                                    <th class="py-3.5 px-4 text-center">簽到 QRCode</th>
                                     <th class="py-3.5 px-4 text-right">操作選項</th>
                                 </tr>
                             </thead>
@@ -447,7 +422,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800 text-lg">Google 試算表即時寫入串接設定 (Google Apps Script Webhook)</h3>
-                            <p class="text-xs text-slate-500">當學員或管理者提交報名表單或完成簽到時，系統將自動同步寫入您指定的 Google 雲端試算表。</p>
+                            <p class="text-xs text-slate-500">當學員或管理者提交報名表單時，系統將自動將資料即時同步寫入您指定的 Google 雲端試算表。</p>
                         </div>
                     </div>
 
@@ -475,94 +450,6 @@
             </div>
         </section>
     </main>
-
-    <!-- QRCODE GENERATOR MODAL (For Admin to show/print) -->
-    <div id="course-qrcode-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div id="print-qrcode-area" class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 text-center p-6 space-y-5">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <div class="flex items-center space-x-2 text-nttax-900">
-                    <i class="fa-solid fa-qrcode text-xl text-amber-500"></i>
-                    <h3 class="font-bold text-lg">課堂簽到專用 QRCode</h3>
-                </div>
-                <button onclick="closeCourseQrModal()" class="text-slate-400 hover:text-slate-600 transition">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-
-            <div class="space-y-1">
-                <h4 id="qr-modal-course-name" class="font-bold text-xl text-slate-900">--</h4>
-                <p id="qr-modal-course-time" class="text-xs text-slate-500 font-medium">--</p>
-                <p id="qr-modal-course-location" class="text-xs text-nttax-700 font-semibold">--</p>
-            </div>
-
-            <!-- QRCode Display Wrapper -->
-            <div class="bg-amber-50/50 p-6 rounded-2xl border-2 border-dashed border-amber-200 flex flex-col items-center justify-center">
-                <div id="qrcode-display-container" class="p-3 bg-white rounded-xl shadow-md border border-slate-200 flex justify-center"></div>
-                <p class="text-xs font-bold text-amber-800 mt-4 flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-mobile-screen-button"></i>
-                    請學員開啟手機相機或掃描器掃碼報到
-                </p>
-            </div>
-
-            <div class="flex space-x-2 pt-1">
-                <button onclick="window.print()" class="w-1/2 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 shadow">
-                    <i class="fa-solid fa-print"></i>
-                    <span>列印 QRCode</span>
-                </button>
-                <button onclick="closeCourseQrModal()" class="w-1/2 py-2.5 px-3 rounded-xl border border-slate-300 text-slate-700 font-semibold text-xs hover:bg-slate-100 transition">
-                    關閉視窗
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SELF CHECK-IN MODAL (For Trainees to scan or type Reg ID) -->
-    <div id="self-checkin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 p-6 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <div class="flex items-center space-x-2 text-nttax-900">
-                    <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold">
-                        <i class="fa-solid fa-qrcode"></i>
-                    </div>
-                    <h3 class="font-bold text-lg">學員課堂自主簽到</h3>
-                </div>
-                <button onclick="closeSelfCheckinModal()" class="text-slate-400 hover:text-slate-600 transition">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-
-            <form onsubmit="handleSelfCheckinSubmit(event)" class="space-y-4 text-left">
-                <div>
-                    <label for="checkin-select-course" class="block text-xs font-bold text-slate-700 mb-1">
-                        簽到課程 <span class="text-rose-500">*</span>
-                    </label>
-                    <select id="checkin-select-course" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-800 text-sm focus:ring-2 focus:ring-nttax-700 outline-none font-medium">
-                        <!-- Dynamic Course Options -->
-                    </select>
-                </div>
-
-                <div>
-                    <label for="checkin-user-id" class="block text-xs font-bold text-slate-700 mb-1">
-                        報名/報到編號 或 員工編號 <span class="text-rose-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <input type="text" id="checkin-user-id" required placeholder="例如：報名編號 #1 或 員工編號 LM11501011" class="w-full px-4 py-3 bg-white border-2 border-amber-400 rounded-xl text-slate-900 font-bold text-base outline-none focus:ring-2 focus:ring-nttax-700">
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1">💡 報名編號可於報名成功彈窗或「個人報名紀錄」中查詢。</p>
-                </div>
-
-                <div class="pt-2 flex space-x-2">
-                    <button type="button" onclick="closeSelfCheckinModal()" class="w-1/3 py-2.5 px-3 rounded-xl border border-slate-300 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition">
-                        取消
-                    </button>
-                    <button type="submit" class="w-2/3 py-3 px-4 rounded-xl bg-nttax-700 hover:bg-nttax-800 text-white font-bold text-sm shadow-md transition flex items-center justify-center space-x-1.5">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>確認送出簽到</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- ADMIN LOGIN AUTHENTICATION MODAL -->
     <div id="admin-login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -822,8 +709,8 @@
 
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left space-y-2 text-xs">
                 <div class="flex justify-between border-b border-slate-200 pb-2">
-                    <span class="text-slate-500">報名/報到編號：</span>
-                    <span id="success-reg-id" class="font-bold text-emerald-700 text-sm font-mono">#1</span>
+                    <span class="text-slate-500">報名編號：</span>
+                    <span id="success-reg-id" class="font-bold text-emerald-700 text-sm font-mono">1</span>
                 </div>
                 <div class="flex justify-between border-b border-slate-200 pb-2">
                     <span class="text-slate-500">學員姓名：</span>
@@ -950,12 +837,13 @@
                 <span>南投縣政府稅務局 版權所有</span>
             </div>
             <div class="text-slate-500">
-                服務電話：(049) 2222121
+                服務電話：(049) 2222121 ｜ 
             </div>
         </div>
     </footer>
 
     <script>
+        // 設定更新：已將預設部署 Webhook URL 更新為您提供的正式網址
         const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxukMHmHtEB7TsWx_6umo4DdKWcv33s9gwHT6Lr7zu6R3sEAfkV8Z6TFerlZiwzy4axSA/exec";
         let adminPassword = localStorage.getItem('NTTAX_ADMIN_PWD') || "nttax2026";
 
@@ -1009,31 +897,20 @@
                 jobTitle: "助理員",
                 userName: "王小美",
                 timestamp: "115/09/01 10:15",
-                checkedIn: false
+                checkedIn: true
             }
         ];
 
         let activePortal = 'user';
         let isAdminAuthenticated = false;
         let deptChartInstance = null;
-        let qrCodeObj = null;
 
         window.onload = function() {
             checkExistingAdminSession();
             renderCoursesGrid();
             populateFilterDropdowns();
             updateDashboardStats();
-            checkUrlCheckinParam();
         };
-
-        // Check URL parameter e.g. ?checkin=course-101
-        function checkUrlCheckinParam() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const checkinCourseId = urlParams.get('checkin');
-            if (checkinCourseId) {
-                openSelfCheckinModal(checkinCourseId);
-            }
-        }
 
         function getNextRegistrationId(courseId) {
             const courseRegs = registrations.filter(r => r.courseId === courseId);
@@ -1055,7 +932,7 @@
                 body: JSON.stringify(data)
             })
             .then(() => {
-                showToast("資料已同步寫入 Google 雲端試算表！", "success");
+                showToast("報名資料已同步寫入 Google 雲端試算表！", "success");
             })
             .catch(err => {
                 console.error("寫入 Google 試算表發生異常:", err);
@@ -1063,107 +940,6 @@
             });
         }
 
-        /* ---------------- QR CODE & SELF CHECK-IN LOGIC ---------------- */
-        function openCourseQrModal(courseId) {
-            const course = courses.find(c => c.id === courseId);
-            if (!course) return;
-
-            document.getElementById('qr-modal-course-name').innerText = course.name;
-            document.getElementById('qr-modal-course-time').innerText = `📅 日期時間：${course.date} ${course.time}`;
-            document.getElementById('qr-modal-course-location').innerText = `📍 地點：${course.location}`;
-
-            const qrcodeContainer = document.getElementById('qrcode-display-container');
-            qrcodeContainer.innerHTML = "";
-
-            // Build Check-in Link with URL parameter
-            const baseUrl = window.location.href.split('?')[0];
-            const checkinUrl = `${baseUrl}?checkin=${course.id}`;
-
-            qrCodeObj = new QRCode(qrcodeContainer, {
-                text: checkinUrl,
-                width: 200,
-                height: 200,
-                colorDark : "#083320",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-
-            document.getElementById('course-qrcode-modal').classList.remove('hidden');
-        }
-
-        function closeCourseQrModal() {
-            document.getElementById('course-qrcode-modal').classList.add('hidden');
-        }
-
-        function openSelfCheckinModal(preselectedCourseId = null) {
-            const selectEl = document.getElementById('checkin-select-course');
-            selectEl.innerHTML = "";
-
-            courses.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.innerText = `${c.name} (${c.date})`;
-                if (preselectedCourseId && c.id === preselectedCourseId) {
-                    opt.selected = true;
-                }
-                selectEl.appendChild(opt);
-            });
-
-            document.getElementById('checkin-user-id').value = "";
-            document.getElementById('self-checkin-modal').classList.remove('hidden');
-        }
-
-        function closeSelfCheckinModal() {
-            document.getElementById('self-checkin-modal').classList.add('hidden');
-        }
-
-        function handleSelfCheckinSubmit(e) {
-            e.preventDefault();
-            const courseId = document.getElementById('checkin-select-course').value;
-            const inputVal = document.getElementById('checkin-user-id').value.trim().toUpperCase();
-
-            if (!courseId || !inputVal) {
-                showToast("請選擇課程並輸入報名/報到編號或員工編號！", "error");
-                return;
-            }
-
-            // Clean input prefix e.g. #1 -> 1
-            const cleanRegId = inputVal.replace('#', '');
-
-            // Find matching registration
-            const matched = registrations.find(r => 
-                r.courseId === courseId && 
-                (r.id.toString() === cleanRegId || r.employeeId.toUpperCase() === inputVal)
-            );
-
-            if (!matched) {
-                showToast(`查無此報名編號/員工編號（${inputVal}）對應之課程報名紀錄！`, "error");
-                return;
-            }
-
-            if (matched.checkedIn) {
-                showToast(`學員 ${matched.userName} (${matched.employeeId}) 先前已完成簽到囉！`, "warning");
-                closeSelfCheckinModal();
-                return;
-            }
-
-            // Mark check-in
-            matched.checkedIn = true;
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-            
-            showToast(`🎉 簽到成功！歡迎 ${matched.department} ${matched.userName} 參加研習！`, "success");
-            closeSelfCheckinModal();
-
-            // Sync with admin view & stats & google sheets
-            updateDashboardStats();
-            renderAdminRoster();
-            sendToGoogleSheets({
-                ...matched,
-                action: "CHECK_IN_UPDATE"
-            });
-        }
-
-        /* ---------------- PORTAL & TAB NAVIGATION ---------------- */
         function switchAdminTab(tab) {
             const tabs = {
                 'courses-mgmt': 'admin-tab-courses',
@@ -1694,7 +1470,7 @@
         }
 
         function showSuccessModal(reg) {
-            document.getElementById('success-reg-id').innerText = `#${reg.id}`;
+            document.getElementById('success-reg-id').innerText = reg.id;
             document.getElementById('success-name').innerText = reg.userName;
             document.getElementById('success-empid').innerText = reg.employeeId;
             document.getElementById('success-jobtitle').innerText = reg.jobTitle || '未填寫';
@@ -1718,11 +1494,9 @@
                 return;
             }
 
-            const cleanQuery = query.replace('#', '');
             const matched = registrations.filter(r => 
                 r.employeeId.toUpperCase().includes(query) || 
-                r.userName.includes(query) ||
-                r.id.toString() === cleanQuery
+                r.userName.includes(query)
             );
 
             if (matched.length === 0) {
@@ -1738,24 +1512,19 @@
             container.innerHTML = matched.map(r => `
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-nttax-700 transition">
                     <div class="space-y-1">
-                        <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+                        <div class="flex items-center space-x-2">
                             <span class="bg-nttax-100 text-nttax-800 text-xs font-bold px-2.5 py-0.5 rounded-full">${r.department}</span>
-                            <span class="text-xs text-slate-500 font-mono">報到編號 #${r.id} | ${r.employeeId} (${r.jobTitle || ''}) ${r.userName}</span>
-                            <span class="text-xs px-2 py-0.5 rounded ${r.checkedIn ? 'bg-emerald-100 text-emerald-800 font-bold' : 'bg-amber-100 text-amber-800 font-bold'}">
-                                ${r.checkedIn ? '✓ 已簽到' : '未簽到'}
+                            <span class="text-xs text-slate-400 font-mono">編號 #${r.id} | ${r.employeeId} (${r.jobTitle || ''}) ${r.userName}</span>
+                            <span class="text-xs px-2 py-0.5 rounded ${r.checkedIn ? 'bg-emerald-100 text-emerald-800 font-bold' : 'bg-slate-100 text-slate-600'}">
+                                ${r.checkedIn ? '✓ 已於現場簽到' : '尚未簽到'}
                             </span>
                         </div>
                         <h4 class="text-lg font-bold text-slate-900">${r.courseName}</h4>
                         <p class="text-xs text-slate-500"><i class="fa-regular fa-clock mr-1"></i>${r.courseDate} ${r.courseTime}</p>
                     </div>
                     <div class="flex items-center space-x-2 self-end md:self-auto">
-                        ${!r.checkedIn ? `
-                            <button onclick="openSelfCheckinModal('${r.courseId}')" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold transition shadow-sm">
-                                <i class="fa-solid fa-qrcode mr-1"></i>立即報到簽到
-                            </button>
-                        ` : ''}
                         <button onclick='showSuccessModal(${JSON.stringify(r)})' class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold transition">
-                            <i class="fa-solid fa-file-circle-check mr-1"></i>檢視詳情
+                            <i class="fa-solid fa-file-circle-check mr-1"></i>檢視報名詳情
                         </button>
                     </div>
                 </div>
@@ -1781,12 +1550,6 @@
                     <td class="py-3.5 px-4 text-center">
                         <button onclick="toggleCourseStatus('${c.id}')" title="點擊切換報名狀態" class="px-2.5 py-1 rounded-full text-xs font-bold transition shadow-sm ${c.status === 'OPEN' ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
                             <i class="fa-solid ${c.status === 'OPEN' ? 'fa-lock-open' : 'fa-lock'} mr-1"></i>${c.status === 'OPEN' ? '開放中' : '已關閉'}
-                        </button>
-                    </td>
-                    <td class="py-3.5 px-4 text-center">
-                        <button onclick="openCourseQrModal('${c.id}')" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1 shadow-sm border border-amber-300">
-                            <i class="fa-solid fa-qrcode text-amber-600"></i>
-                            <span>簽到 QRCode</span>
                         </button>
                     </td>
                     <td class="py-3.5 px-4 text-right space-x-1.5">
@@ -1928,8 +1691,7 @@
                 const matchSearch = (!searchKeyword || 
                     r.employeeId.toUpperCase().includes(searchKeyword) || 
                     (r.jobTitle && r.jobTitle.toUpperCase().includes(searchKeyword)) ||
-                    r.userName.includes(searchKeyword) ||
-                    r.id.toString() === searchKeyword.replace('#',''));
+                    r.userName.includes(searchKeyword));
                 return matchCourse && matchDept && matchSearch;
             });
 
